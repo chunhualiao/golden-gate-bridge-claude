@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golden Gate Bridge — 3D Flyover</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <div id="panel">
+    <h1>Golden Gate Bridge</h1>
+
+    <div class="row">
+      <label for="time">Time of day</label>
+      <span class="value" id="time-label">10:30</span>
+    </div>
+    <input id="time" type="range" min="0" max="24" step="0.05" value="10.5" />
+
+    <div class="row">
+      <label for="fog">Fog</label>
+      <span class="value" id="fog-label">12%</span>
+    </div>
+    <input id="fog" type="range" min="0" max="1" step="0.01" value="0.12" />
+
+    <div class="presets">
+      <button data-preset data-time="12.3" data-fog="0.04">Noon</button>
+      <button data-preset data-time="17.7" data-fog="0.10">Golden hour</button>
+      <button data-preset data-time="23.3" data-fog="0.06">Night</button>
+      <button data-preset data-time="8.3" data-fog="0.78">Foggy morning</button>
+    </div>
+
+    <div class="toggles">
+      <label><input id="toggle-traffic" type="checkbox" checked /> Traffic</label>
+      <label><input id="toggle-shadows" type="checkbox" checked /> Shadows</label>
+    </div>
+  </div>
+
+  <div id="hint">
+    <b>Mouse</b> look &nbsp;·&nbsp; <b>W A S D</b> move &nbsp;·&nbsp;
+    <b>Space</b>/<b>E</b> up &nbsp;·&nbsp; <b>Shift</b>/<b>Q</b> down<br />
+    <b>Ctrl</b>/<b>F</b> boost &nbsp;·&nbsp; <b>Scroll</b> speed &nbsp;·&nbsp;
+    <b>Esc</b> release cursor
+  </div>
+
+  <div id="splash">
+    <div class="card">
+      <h2>Click to fly</h2>
+      <p>Mouse to look around · WASD to move</p>
+    </div>
+  </div>
+
+  <div id="readout"><span id="fps">– fps</span> · <span id="speed">70 m/s</span></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
