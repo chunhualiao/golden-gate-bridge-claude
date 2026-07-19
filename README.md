@@ -3,6 +3,8 @@
 **▶ Try it live: [golden-gate-bridge-claude.pages.dev](https://golden-gate-bridge-claude.pages.dev)**
 *(desktop + mouse/keyboard recommended — click the canvas, then fly with WASD)*
 
+[![Golden Gate Bridge 3D flyover — late-afternoon view of the full span](docs/screenshot.jpg)](https://golden-gate-bridge-claude.pages.dev)
+
 A photorealistic-leaning, fully procedural 3D model of the Golden Gate Bridge built
 with [three.js](https://threejs.org). No external 3D assets or textures — every
 geometry and texture is generated in code, at true real-world scale (1,280 m main
