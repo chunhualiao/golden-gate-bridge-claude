@@ -27,8 +27,8 @@ const traffic = createTraffic();
 scene.add(traffic.group);
 
 const splash = document.getElementById('splash');
-const controls = createFlyControls(camera, renderer.domElement, (active) => {
-  splash.classList.toggle('hidden', active);
+const controls = createFlyControls(camera, renderer.domElement, () => {
+  splash.classList.add('hidden');
 });
 
 initUI({ env, traffic, sun: env.sun, renderer });

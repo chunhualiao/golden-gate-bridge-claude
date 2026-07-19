@@ -1,7 +1,7 @@
 # Golden Gate Bridge — 3D Interactive Flyover
 
 **▶ Try it live: [golden-gate-bridge-claude.pages.dev](https://golden-gate-bridge-claude.pages.dev)**
-*(desktop + mouse/keyboard recommended — click the canvas, then fly with WASD)*
+*(desktop + mouse/keyboard recommended — hold the mouse to look around, fly with WASD)*
 
 [![Golden Gate Bridge 3D flyover — late-afternoon view of the full span](docs/screenshot.jpg)](https://golden-gate-bridge-claude.pages.dev)
 
@@ -20,7 +20,8 @@ The three.js runtime is vendored in [`vendor/`](vendor/), so there is nothing to
 install — just serve the folder over HTTP:
 
 ```bash
-python3 -m http.server 5173        # or: npx serve -l 5173
+python3 dev_server.py              # serves on :5173 with HTTP caching disabled
+# or any static server, e.g.: python3 -m http.server 5173
 # open http://localhost:5173
 ```
 
@@ -31,8 +32,7 @@ modules require HTTP.
 
 | Input | Action |
 |---|---|
-| Click canvas | capture mouse (Esc to release) |
-| Mouse | look around |
+| Hold mouse button + drag | look around (release to stop) |
 | `W A S D` / arrows | fly forward / left / back / right |
 | `Space` / `E` | ascend |
 | `Shift` / `Q` | descend |
@@ -86,8 +86,8 @@ only needs `index.html`, `style.css`, `js/`, and `vendor/`) and prints the
 - **Textures** ([js/textures.js](js/textures.js)) — canvas-generated asphalt with
   lane markings, concrete, water normal map, window grids, glow sprites.
 - **Traffic** ([js/traffic.js](js/traffic.js)) — instanced cars in 6 lanes.
-- **Controls** ([js/controls.js](js/controls.js)) — pointer-lock mouse look with
-  a drag fallback, velocity-damped WASD flight.
+- **Controls** ([js/controls.js](js/controls.js)) — press-and-drag mouse look
+  (no pointer lock), velocity-damped WASD flight.
 
 Performance: ~107 draw calls / ~280 k triangles via instancing — comfortably
 60 fps on integrated GPUs.

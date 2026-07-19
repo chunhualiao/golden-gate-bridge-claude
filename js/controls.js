@@ -1,47 +1,62 @@
-// Free-fly camera: pointer-lock mouse look (with drag fallback) + WASD keys.
+// Free-fly camera: press-and-drag mouse look + WASD keys. No pointer lock.
 import * as THREE from 'three';
 
-export function createFlyControls(camera, dom, onActiveChange) {
+export function createFlyControls(camera, dom, onFirstInteraction) {
   const euler = new THREE.Euler(0, 0, 0, 'YXZ');
   euler.setFromQuaternion(camera.quaternion);
   const keys = new Set();
   const vel = new THREE.Vector3();
   let speed = 70;
-  let locked = false;
   let dragging = false;
+  let lastX = 0, lastY = 0;
+  let interacted = false;
 
-  const notify = () => onActiveChange?.(locked || dragging);
+  const markActive = () => {
+    if (!interacted) {
+      interacted = true;
+      onFirstInteraction?.();
+    }
+  };
 
   function look(dx, dy) {
-    euler.y -= dx * 0.0021;
-    euler.x = THREE.MathUtils.clamp(euler.x - dy * 0.0021, -1.55, 1.55);
+    euler.y -= dx * 0.0024;
+    euler.x = THREE.MathUtils.clamp(euler.x - dy * 0.0024, -1.55, 1.55);
     camera.quaternion.setFromEuler(euler);
   }
 
-  dom.addEventListener('click', () => {
-    if (!locked) dom.requestPointerLock?.();
+  dom.style.cursor = 'grab';
+  dom.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    dom.style.cursor = 'grabbing';
+    dom.setPointerCapture?.(e.pointerId);
+    markActive();
   });
-  document.addEventListener('pointerlockchange', () => {
-    locked = document.pointerLockElement === dom;
-    notify();
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    look(e.clientX - lastX, e.clientY - lastY);
+    lastX = e.clientX;
+    lastY = e.clientY;
   });
-  document.addEventListener('pointerlockerror', () => { locked = false; notify(); });
-
-  document.addEventListener('mousemove', (e) => {
-    if (locked || dragging) look(e.movementX, e.movementY);
+  const endDrag = () => {
+    dragging = false;
+    dom.style.cursor = 'grab';
+  };
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+  window.addEventListener('blur', () => {
+    endDrag();
+    keys.clear();
   });
-  dom.addEventListener('mousedown', () => {
-    if (!locked) { dragging = true; notify(); }
-  });
-  window.addEventListener('mouseup', () => { dragging = false; notify(); });
 
   window.addEventListener('keydown', (e) => {
     if (e.target instanceof HTMLInputElement) return;
     keys.add(e.code);
     if (e.code === 'Space') e.preventDefault();
+    markActive();
   });
   window.addEventListener('keyup', (e) => keys.delete(e.code));
-  window.addEventListener('blur', () => keys.clear());
 
   dom.addEventListener('wheel', (e) => {
     e.preventDefault();
